@@ -3,5 +3,8 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"settings": {
+		"python.pythonPath": "C:\\Users\\x\\Desktop\\Python\\ReactDjango\\venv\\Scripts"
+	}
 }
