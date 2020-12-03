@@ -14,11 +14,15 @@ this is amazing
 
 <div class='row mb-4'>
     <div class='col-md-4 mx-auto col-10'>
-        <form class='form' id='tweet-create-form' method='POST' action='/create-tweet'>
+        <form 
+            class='form' 
+            id='tweet-create-form' 
+            method='POST' 
+            action='/create-tweet'>
             {%csrf_token%}
-            <input type='hidden' value='/' name='next' />
-            <textarea class='form-control' name='content' placeholder='Your tweet'></textarea>
-            <button class='btn btn-primary' type='submit'>Tweet</button>
+                <input type='hidden' value='/' name='next' />
+                <textarea class='form-control' name='content' placeholder='Your tweet'></textarea>
+                <button class='btn btn-primary' type='submit'>Tweet</button>
         </form>
     </div>
 
@@ -38,9 +42,10 @@ this is amazing
         const method = myForm.getAttribute("method")
         const xhr = new XMLHttpRequest()
         xhr.open(method,url)
+        xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
         xhr.onload = function(){
-            const serverResponse = xhr.response
-            //console.log(serverResponse)
+            console.log(xhr.response)
             const tweetsEl = document.getElementById('tweets')
             loadTweets(tweetsEl)
 
@@ -77,11 +82,19 @@ this is amazing
         }
         xhr.send()
     }
-   
+
     loadTweets(tweetsEl)
 
     function LikeBtn(tweet) {
-        return "<button class='btn btn-primary btn-sm' onClick=handleDidLike(" + tweet.id + "," + tweet.likes + ")>"+tweet.likes+" Like</button>"
+         var formatedButton = 
+            "<button class='btn btn-primary btn-sm' onClick=handleDidLike(" 
+            + tweet.id 
+            + "," 
+            + tweet.likes 
+            + ")>"
+            +tweet.likes
+            +" Like</button>"
+        return formatedButton
     }
 
     function handleDidLike(tweet_id,currentCount){
@@ -91,10 +104,13 @@ this is amazing
     }
 
     function formatTweetElement(tweet){
-        var formatedTweet = '<div class="col-12 col-md-10 mx-auto border rounded py-3 mb-4" id="tweet-'+tweet.id 
-        +'"><p>' + tweet.content + 
-            "</p><div class='btn-group'>" + LikeBtn(tweet) +        
-            '</div></div>'
+        var formatedTweet = 
+            '<div class="col-12 col-md-10 mx-auto border rounded py-3 mb-4"'
+            + 'id="tweet-'+tweet.id
+            +'"><p>' + tweet.content 
+            +"</p><div class='btn-group'>" 
+            + LikeBtn(tweet) 
+            +'</div></div>'
         return formatedTweet
     }
 
