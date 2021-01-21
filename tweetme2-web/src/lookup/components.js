@@ -14,32 +14,36 @@ function getCookie(name) {
   return cookieValue;
 }
 
-export function backendLookup(method, endpoint, callback, data){
+export function backendLookup(method, endpoint, callback, data) {
   let jsonData;
   if (data){
     jsonData = JSON.stringify(data)
   }
-    const xhr = new XMLHttpRequest()
-    const url = `http://localhost:8000/api${endpoint}`
-    xhr.responseType = 'json'
-    const csrftoken = getCookie('csrftoken');
-    xhr.open(method,url)
-    xhr.setRequestHeader('Content-Type','application/json')
-    
-    if (csrftoken){
-      xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")
-      xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
-      xhr.setRequestHeader('X-CSRFToken', csrftoken)
+  const xhr = new XMLHttpRequest()
+  const url = `http://localhost:8000/api${endpoint}`
+  xhr.responseType = "json"
+  const csrftoken = getCookie('csrftoken');
+  xhr.open(method, url)
+  xhr.setRequestHeader("Content-Type", "application/json")
+
+  if (csrftoken){
+    // xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+    xhr.setRequestHeader("X-CSRFToken", csrftoken)
+  }
+  
+  xhr.onload = function() {
+    if (xhr.status === 403) {
+      const detail = xhr.response.detail
+      if (detail === "Authentication credentials were not provided."){
+        window.location.href = "/login?showLoginRequired=true"
+      }
     }
-    
-    xhr.onload = function(){            
-        callback(xhr.response, xhr.status)
-    }
-    xhr.onerror = function (e) {
-      console.log(e)
-      callback({'message': 'the request was an error'}, 400)
-    }
-    console.log(jsonData)
-    xhr.send(jsonData)
+    callback(xhr.response, xhr.status)
+  }
+  xhr.onerror = function (e) {
+    callback({"message": "The request was an error"}, 400)
+  }
+  xhr.send(jsonData)
 }
 
