@@ -6,4 +6,4 @@ Twitter clone
 3. step 3
 
 ## Tests
-gsdfgs ```javascript kjhg``` kjhbjhvb
+gsdfgs ``` kjhg``` kjhbjhvb
