@@ -6,6 +6,6 @@ Twitter clone
 3. step 3
 
 ## Tests
-'''
+'''javascript
 kjhg
 '''
